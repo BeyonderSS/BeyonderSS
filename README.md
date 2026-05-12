@@ -75,25 +75,47 @@ Deepgram live transcription, Electron overlay invisible during screen-shares, Ne
 
 <br/>
 
-<!-- ░░ STATS · two cards only ░░ -->
-<div align="center">
-
-<img height="160" src="https://github-readme-stats.vercel.app/api?username=BeyonderSS&show_icons=true&hide_border=true&bg_color=0a0a0a&title_color=22D3EE&icon_color=22D3EE&text_color=CBD5E1&ring_color=22D3EE&include_all_commits=true&count_private=true&rank_icon=percentile" />
-<img height="160" src="https://streak-stats.demolab.com?user=BeyonderSS&hide_border=true&background=0a0a0a&stroke=22D3EE&ring=22D3EE&fire=22D3EE&currStreakLabel=22D3EE&sideLabels=CBD5E1&dates=64748B&currStreakNum=FFFFFF&sideNums=FFFFFF" />
-
-</div>
+<!-- ░░ STATS · custom SVG (left) + streak (right) ░░ -->
+<table width="100%" border="0">
+<tr>
+<td width="50%" valign="top">
+  <img src="https://raw.githubusercontent.com/BeyonderSS/BeyonderSS/main/assets/stats.svg" alt="GitHub stats — repos, stars, followers, following" width="100%" />
+</td>
+<td width="50%" valign="top">
+  <img src="https://streak-stats.demolab.com?user=BeyonderSS&hide_border=true&background=0a0a0a&stroke=22D3EE&ring=22D3EE&fire=22D3EE&currStreakLabel=22D3EE&sideLabels=CBD5E1&dates=64748B&currStreakNum=FFFFFF&sideNums=FFFFFF" alt="streak" width="100%" />
+</td>
+</tr>
+</table>
 
 <br/>
 
-<!-- ░░ SELECTED PUBLIC WORK ░░ -->
-<p>
-<a href="https://github.com/BeyonderSS/Puneet-Portfolio">
-  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=BeyonderSS&repo=Puneet-Portfolio&hide_border=true&bg_color=0a0a0a&title_color=22D3EE&icon_color=22D3EE&text_color=CBD5E1" />
-</a>
-<a href="https://github.com/BeyonderSS/automail-campaign-manager">
-  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=BeyonderSS&repo=automail-campaign-manager&hide_border=true&bg_color=0a0a0a&title_color=22D3EE&icon_color=22D3EE&text_color=CBD5E1" />
-</a>
-</p>
+<!-- ░░ SELECTED PUBLIC WORK — 4 custom-generated SVG cards ░░ -->
+<table width="100%" border="0">
+<tr>
+<td width="50%" valign="top">
+  <a href="https://github.com/BeyonderSS/Puneet-Portfolio">
+    <img src="https://raw.githubusercontent.com/BeyonderSS/BeyonderSS/main/assets/pin-1.svg" alt="Puneet-Portfolio" width="100%" />
+  </a>
+</td>
+<td width="50%" valign="top">
+  <a href="https://github.com/BeyonderSS/automail-campaign-manager">
+    <img src="https://raw.githubusercontent.com/BeyonderSS/BeyonderSS/main/assets/pin-2.svg" alt="automail-campaign-manager" width="100%" />
+  </a>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+  <a href="https://github.com/BeyonderSS/Waiterless-Production">
+    <img src="https://raw.githubusercontent.com/BeyonderSS/BeyonderSS/main/assets/pin-3.svg" alt="Waiterless-Production" width="100%" />
+  </a>
+</td>
+<td width="50%" valign="top">
+  <a href="https://github.com/BeyonderSS/Namaste-Hospital">
+    <img src="https://raw.githubusercontent.com/BeyonderSS/BeyonderSS/main/assets/pin-4.svg" alt="Namaste-Hospital" width="100%" />
+  </a>
+</td>
+</tr>
+</table>
 
 <br/>
 
