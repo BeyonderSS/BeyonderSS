@@ -164,7 +164,7 @@ const hero = `<?xml version="1.0" encoding="UTF-8"?>
   <g class="fade d5">
     <g transform="translate(64 348)">
       <rect width="178" height="38" rx="2" fill="${T.accent}"/>
-      <text x="89" y="25" class="pill-t" font-size="12" fill="${T.bg}" text-anchor="middle">SHIPPING · BLUE ERA</text>
+      <text x="89" y="25" class="pill-t" font-size="12" fill="${T.bg}" text-anchor="middle">SHIPPING · INTEGRIS</text>
     </g>
     <g transform="translate(256 348)">
       <rect width="158" height="38" rx="2" fill="none" stroke="${T.accent}" stroke-width="1.5"/>
@@ -172,7 +172,7 @@ const hero = `<?xml version="1.0" encoding="UTF-8"?>
     </g>
     <g transform="translate(428 348)">
       <rect width="158" height="38" rx="2" fill="none" stroke="${T.accent}" stroke-width="1.5"/>
-      <text x="79" y="25" class="pill-t" font-size="12" fill="${T.accent}" text-anchor="middle">AWS · WEBRTC</text>
+      <text x="79" y="25" class="pill-t" font-size="12" fill="${T.accent}" text-anchor="middle">AI · DJANGO</text>
     </g>
     <g transform="translate(600 348)">
       <rect width="178" height="38" rx="2" fill="none" stroke="${T.accent}" stroke-width="1.5"/>
@@ -212,14 +212,14 @@ const now = `<?xml version="1.0" encoding="UTF-8"?>
 
   <g class="fade d2">
     <text x="42"  y="144" class="label" font-size="11">FOCUS</text>
-    <text x="42"  y="166" class="val"   font-size="15">Blue Era · rider + grocery services · scaling RTC</text>
+    <text x="42"  y="166" class="val"   font-size="15">Integris · finance automation · multi-entity RBAC + AI parsing</text>
     <text x="42"  y="200" class="label" font-size="11">READING</text>
     <text x="42"  y="222" class="val"   font-size="15">Designing Data-Intensive Applications · Kleppmann</text>
   </g>
 
   <g class="fade d3">
     <text x="720" y="144" class="label" font-size="11">NOTE TO SELF</text>
-    <text x="720" y="166" class="val"   font-size="15">kafka rebalancing is half art, half cron job.</text>
+    <text x="720" y="166" class="val"   font-size="15">every accounting format is its own dialect of chaos.</text>
     <text x="720" y="200" class="label" font-size="11">MOOD</text>
     <g transform="translate(720 210)">
       ${Array.from({length:10}).map((_,i)=>`<rect x="${i*16}" y="0" width="10" height="14" fill="${i<8 ? T.accent : T.rule}"/>`).join("")}

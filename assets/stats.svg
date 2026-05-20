@@ -50,7 +50,7 @@
   <g class="fade d2" transform="translate(24 120)">
     <g transform="translate(0 0)">
       <text y="22"  class="stat" font-size="11">REPOS</text>
-      <text y="84"  class="big" font-size="60">25</text>
+      <text y="84"  class="big" font-size="60">26</text>
     </g>
     <g transform="translate(140 0)">
       <text y="22"  class="stat" font-size="11">STARS</text>
@@ -67,6 +67,6 @@
   </g>
 
   <g class="fade d3" transform="translate(24 210)">
-    <text class="lbl" font-size="10">UPDATED · 2026-05-12  ·  REGENERATES ON COMMIT</text>
+    <text class="lbl" font-size="10">UPDATED · 2026-05-20  ·  REGENERATES ON COMMIT</text>
   </g>
 </svg>

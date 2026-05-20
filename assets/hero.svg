@@ -101,7 +101,7 @@
   <g class="fade d5">
     <g transform="translate(64 348)">
       <rect width="178" height="38" rx="2" fill="#22D3EE"/>
-      <text x="89" y="25" class="pill-t" font-size="12" fill="#0a0a0a" text-anchor="middle">SHIPPING · BLUE ERA</text>
+      <text x="89" y="25" class="pill-t" font-size="12" fill="#0a0a0a" text-anchor="middle">SHIPPING · INTEGRIS</text>
     </g>
     <g transform="translate(256 348)">
       <rect width="158" height="38" rx="2" fill="none" stroke="#22D3EE" stroke-width="1.5"/>
@@ -109,7 +109,7 @@
     </g>
     <g transform="translate(428 348)">
       <rect width="158" height="38" rx="2" fill="none" stroke="#22D3EE" stroke-width="1.5"/>
-      <text x="79" y="25" class="pill-t" font-size="12" fill="#22D3EE" text-anchor="middle">AWS · WEBRTC</text>
+      <text x="79" y="25" class="pill-t" font-size="12" fill="#22D3EE" text-anchor="middle">AI · DJANGO</text>
     </g>
     <g transform="translate(600 348)">
       <rect width="178" height="38" rx="2" fill="none" stroke="#22D3EE" stroke-width="1.5"/>

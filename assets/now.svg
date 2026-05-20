@@ -43,20 +43,20 @@
   <g class="fade d1">
     <text x="42" y="50" class="label" font-size="13">/NOW · <tspan fill="#64748b">~/CONFIG</tspan></text>
     <circle cx="180" cy="46" r="4" class="dot"/>
-    <text x="1238" y="50" class="micro" font-size="11" text-anchor="end">UPDATED · 2026-05-12</text>
+    <text x="1238" y="50" class="micro" font-size="11" text-anchor="end">UPDATED · 2026-05-20</text>
     <text x="42" y="106" class="h" font-size="32">currently on my desk.</text>
   </g>
 
   <g class="fade d2">
     <text x="42"  y="144" class="label" font-size="11">FOCUS</text>
-    <text x="42"  y="166" class="val"   font-size="15">Blue Era · rider + grocery services · scaling RTC</text>
+    <text x="42"  y="166" class="val"   font-size="15">Integris · finance automation · multi-entity RBAC + AI parsing</text>
     <text x="42"  y="200" class="label" font-size="11">READING</text>
     <text x="42"  y="222" class="val"   font-size="15">Designing Data-Intensive Applications · Kleppmann</text>
   </g>
 
   <g class="fade d3">
     <text x="720" y="144" class="label" font-size="11">NOTE TO SELF</text>
-    <text x="720" y="166" class="val"   font-size="15">kafka rebalancing is half art, half cron job.</text>
+    <text x="720" y="166" class="val"   font-size="15">every accounting format is its own dialect of chaos.</text>
     <text x="720" y="200" class="label" font-size="11">MOOD</text>
     <g transform="translate(720 210)">
       <rect x="0" y="0" width="10" height="14" fill="#22D3EE"/><rect x="16" y="0" width="10" height="14" fill="#22D3EE"/><rect x="32" y="0" width="10" height="14" fill="#22D3EE"/><rect x="48" y="0" width="10" height="14" fill="#22D3EE"/><rect x="64" y="0" width="10" height="14" fill="#22D3EE"/><rect x="80" y="0" width="10" height="14" fill="#22D3EE"/><rect x="96" y="0" width="10" height="14" fill="#22D3EE"/><rect x="112" y="0" width="10" height="14" fill="#22D3EE"/><rect x="128" y="0" width="10" height="14" fill="#1f1f1f"/><rect x="144" y="0" width="10" height="14" fill="#1f1f1f"/>
