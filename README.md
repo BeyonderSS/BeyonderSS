@@ -45,12 +45,12 @@
 <tr>
 <td width="50%" valign="top">
 
-#### ◆ Blue Era · BLUECS Limited
-<sub><i>Jul 2025 → Now · Full-Stack Engineer</i></sub>
+#### ◆ Integris · @AskGalore
+<sub><i>Now · SDE · AI Automation for Finance (PlainFlow AI)</i></sub>
 
-India's first indigenous super-app. I own 10+ microservices including a 5-service chat stack with E2E encryption + WebRTC at sub-200ms latency for thousands of concurrent users.
+PlainFlow AI's flagship finance-automation platform — Django backend with multi-entity RBAC, React/TS frontend, AI-driven parsing across global accounting formats (SAP, OneBI, custom Excel dumps).
 
-<sub><code>gRPC</code> <code>Kafka</code> <code>WebRTC</code> <code>AWS</code></sub>
+<sub><code>Django</code> <code>React</code> <code>TypeScript</code> <code>pandas</code> <code>AI</code></sub>
 
 </td>
 <td width="50%" valign="top">
