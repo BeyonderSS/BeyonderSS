@@ -1,10 +1,17 @@
 #!/usr/bin/env node
 /**
  * Generates a set of custom SVGs for the profile README:
- *   - assets/hero.svg     · the top banner
- *   - assets/now.svg      · the /now config card
- *   - assets/stats.svg    · key numbers (followers, repos, total stars)
- *   - assets/pin-*.svg    · 4 selected-work cards
+ *   - assets/hero.svg      · the top banner (boot sequence → reveal)
+ *   - assets/now.svg       · the /now config card
+ *   - assets/badge-*.svg   · portfolio/linkedin/email link pills
+ *   - assets/stack.svg     · tech stack, typographic
+ *   - assets/waveform.svg  · a year of contributions as a sound wave
+ *   - assets/langs.svg     · language breakdown across owned repos
+ *   - assets/hours.svg     · commit activity by hour of day (IST)
+ *   - assets/stats.svg     · key numbers (followers, repos, total stars)
+ *   - assets/streak.svg    · current/longest contribution streak
+ *   - assets/pin-*.svg     · 4 selected-work cards
+ *   - assets/footer.svg    · terminal-prompt status bar
  *
  * Why generate everything custom?
  *   github-readme-stats.vercel.app / its pin endpoint go down often
@@ -108,10 +115,24 @@ const FONTS_AND_ANIM = `
 const W = 1280, H = 440;
 const NAME = "PUNEET BHARDWAJ";
 
+// boot sequence plays first (0 → ~1.45s), then the whole hero fades in —
+// a two-stage reveal instead of a single fade-up. HS shifts every existing
+// .fade/.accent-line delay later via inline style (inline wins over the
+// class's own animation-delay, so the shared FONTS_AND_ANIM rules stay
+// untouched for every other card).
+const HS = 1.5;
+const delay = (s) => `style="animation-delay:${(s + HS).toFixed(2)}s"`;
+
+const BOOT_CSS = `
+  .boot{ font-family:'JBM',ui-monospace,monospace; fill:${T.accent}; letter-spacing:0.04em;
+    opacity:0; animation:bootcycle 1s ease-in-out forwards; }
+  @keyframes bootcycle{ 0%{opacity:0} 15%{opacity:1} 70%{opacity:1} 100%{opacity:0} }
+`;
+
 const hero = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Puneet Bhardwaj — full-stack engineer and system designer">
   <defs>
-    <style>${FONTS_AND_ANIM}</style>
+    <style>${FONTS_AND_ANIM}${BOOT_CSS}</style>
 
     <pattern id="grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
       <path d="M40 0 L0 0 0 40" fill="none" stroke="${T.bgGrid}" stroke-width="0.8" opacity="0.4"/>
@@ -140,8 +161,22 @@ const hero = `<?xml version="1.0" encoding="UTF-8"?>
   <rect width="${W}" height="${H}" fill="url(#glow)"/>
   <rect width="${W}" height="${H}" fill="url(#glow2)"/>
 
+  <!-- boot sequence — plays once before the hero content reveals -->
+  <g class="boot" font-size="18" style="animation-delay:0s">
+    <text x="64" y="188">BOOTING SYSTEM_</text>
+  </g>
+  <g class="boot" font-size="15" style="animation-delay:.18s">
+    <text x="64" y="222">&gt; whoami · puneet-bhardwaj</text>
+  </g>
+  <g class="boot" font-size="15" style="animation-delay:.34s">
+    <text x="64" y="246">&gt; uptime · 3+ yrs prod</text>
+  </g>
+  <g class="boot" font-size="15" style="animation-delay:.50s">
+    <text x="64" y="270">&gt; status · ready ▌</text>
+  </g>
+
   <!-- corner brackets -->
-  <g stroke="${T.accent}" stroke-width="2" fill="none" class="fade d1">
+  <g stroke="${T.accent}" stroke-width="2" fill="none" class="fade d1" ${delay(0.10)}>
     <path d="M 28 28 L 28 92 M 28 28 L 92 28"/>
     <path d="M ${W-28} 28 L ${W-28} 92 M ${W-28} 28 L ${W-92} 28"/>
     <path d="M 28 ${H-28} L 28 ${H-92} M 28 ${H-28} L 92 ${H-28}"/>
@@ -149,22 +184,22 @@ const hero = `<?xml version="1.0" encoding="UTF-8"?>
   </g>
 
   <!-- top meta strip -->
-  <g class="fade d1">
+  <g class="fade d1" ${delay(0.10)}>
     <line x1="64" y1="76" x2="220" y2="76" stroke="${T.accent}" stroke-width="1.5"/>
     <text x="232" y="80" class="meta" font-size="13">00 · PROFILE · @BEYONDERSS</text>
   </g>
 
   <!-- right meta: small N° tag (never collides with name) -->
-  <g class="fade d2">
+  <g class="fade d2" ${delay(0.25)}>
     <text x="${W-104}" y="80" class="micro" font-size="11" text-anchor="end">N° / 2026</text>
     <circle cx="${W-90}" cy="76" r="4" class="dot"/>
   </g>
 
   <!-- name — sized so it never crosses x=${W-160} -->
-  <text x="62" y="232" class="name fade d2" font-size="98" fill="url(#nameGrad)">${NAME}</text>
+  <text x="62" y="232" class="name fade d2" ${delay(0.25)} font-size="98" fill="url(#nameGrad)">${NAME}</text>
 
   <!-- role line -->
-  <text x="64" y="278" class="role fade d3" font-size="24">
+  <text x="64" y="278" class="role fade d3" ${delay(0.40)} font-size="24">
     full-stack engineer
     <tspan fill="${T.accent}"> / </tspan>
     system designer
@@ -172,12 +207,12 @@ const hero = `<?xml version="1.0" encoding="UTF-8"?>
   </text>
 
   <!-- animated accent line -->
-  <g class="fade d4">
-    <path class="accent-line" d="M 64 312 L ${W-64} 312"/>
+  <g class="fade d4" ${delay(0.55)}>
+    <path class="accent-line" ${delay(0.20)} d="M 64 312 L ${W-64} 312"/>
   </g>
 
   <!-- bottom pills (no SVG transform attribute on .fade element) -->
-  <g class="fade d5">
+  <g class="fade d5" ${delay(0.70)}>
     <g transform="translate(64 348)">
       <rect width="178" height="38" rx="2" fill="${T.accent}"/>
       <text x="89" y="25" class="pill-t" font-size="12" fill="${T.bg}" text-anchor="middle">SHIPPING · INTEGRIS</text>
@@ -197,7 +232,7 @@ const hero = `<?xml version="1.0" encoding="UTF-8"?>
   </g>
 
   <!-- right column: huge faded N°26 (offset further right & lower so it sits BELOW the name's right edge) -->
-  <g class="fade d3">
+  <g class="fade d3" ${delay(0.40)}>
     <text x="${W-72}" y="408" class="name" font-size="72" text-anchor="end" fill="${T.accent}" opacity="0.18">N°26</text>
   </g>
 
@@ -394,8 +429,8 @@ async function fetchStats() {
     headers: { ...authHeaders, "User-Agent": "BeyonderSS-readme-generator" }
   })).json();
   const stars = repos.reduce((a, r) => a + (r.stargazers_count || 0), 0);
-  const own   = repos.filter(r => !r.fork).length;
-  return { followers: user.followers, following: user.following, public_repos: user.public_repos, stars, own };
+  const ownRepos = repos.filter(r => !r.fork);
+  return { followers: user.followers, following: user.following, public_repos: user.public_repos, stars, own: ownRepos.length, ownRepos };
 }
 
 const stats = await fetchStats().catch(e => { console.warn(`⚠ stats: ${e.message}`); return null; });
@@ -517,6 +552,191 @@ ${cell2("YEAR",    streaks.total,         380, false)}
   console.log(`✓ assets/streak.svg`);
 } else {
   console.warn("⚠ skipped streak.svg (no token / graphql failed)");
+}
+
+// ─── COMMIT WAVEFORM (companion to the snake, not a replacement) ─
+// One bar per day of the last year, height = that day's contribution
+// count on a sqrt scale (so a handful of 20-commit days don't flatten
+// everything else to nothing). Alongside the snake instead of instead-of —
+// the snake shows the grid GitHub already renders everywhere; this shows
+// the same year as a sound wave in the page's own palette.
+if (calendar) {
+  const days = calendar.weeks.flatMap(w => w.contributionDays);
+  const WFW = 1280, WFH = 160;
+  const plotW = WFW - 84, plotH = 92, baseY = 130;
+  const barW = plotW / days.length;
+  const max = Math.max(1, ...days.map(d => d.contributionCount));
+  const bars = days.map((d, idx) => {
+    const h = d.contributionCount === 0 ? 2 : Math.max(4, Math.round((Math.sqrt(d.contributionCount) / Math.sqrt(max)) * plotH));
+    const x = 42 + idx * barW;
+    const op = d.contributionCount === 0 ? 0.25 : 0.4 + 0.6 * (Math.sqrt(d.contributionCount) / Math.sqrt(max));
+    return `<rect x="${x.toFixed(1)}" y="${baseY - h}" width="${Math.max(1, barW - 1).toFixed(1)}" height="${h}" fill="${T.accent}" opacity="${op.toFixed(2)}"/>`;
+  }).join("");
+
+  const waveformSvg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${WFW} ${WFH}" width="${WFW}" height="${WFH}" role="img" aria-label="Commit waveform — a year of contributions as a sound wave">
+  <defs><style>${FONTS_AND_ANIM}</style></defs>
+  <rect width="${WFW}" height="${WFH}" fill="${T.bg}"/>
+  <rect x="0" y="0" width="4" height="${WFH}" fill="${T.accent}"/>
+
+  <g class="fade d1">
+    <text x="42" y="40" class="meta" font-size="13">05 · WAVEFORM · @BEYONDERSS</text>
+    <text x="${WFW-42}" y="40" class="micro" font-size="11" text-anchor="end">${days.length} DAYS · ${calendar.totalContributions} COMMITS</text>
+  </g>
+
+  <g class="fade d2">
+    ${bars}
+    <line x1="42" y1="${baseY + 0.5}" x2="${WFW-42}" y2="${baseY + 0.5}" stroke="${T.rule}" stroke-width="1"/>
+  </g>
+</svg>`;
+  writeFileSync(resolve(outDir, "waveform.svg"), waveformSvg);
+  console.log(`✓ assets/waveform.svg`);
+} else {
+  console.warn("⚠ skipped waveform.svg (no token / graphql failed)");
+}
+
+// ─── LANGUAGE BREAKDOWN ──────────────────────────────────────
+// Bytes-per-language across all owned repos, reduced to one stacked bar —
+// the dominant language gets the accent, the rest step down through grays
+// instead of the rainbow every language-stats card defaults to.
+async function fetchLanguageBytes(repos) {
+  const totals = {};
+  for (const repo of repos) {
+    try {
+      const r = await fetch(repo.languages_url, { headers: { ...authHeaders, "User-Agent": "BeyonderSS-readme-generator" } });
+      if (!r.ok) continue;
+      const langs = await r.json();
+      for (const [lang, bytes] of Object.entries(langs)) totals[lang] = (totals[lang] || 0) + bytes;
+    } catch { /* skip unreadable repo */ }
+  }
+  return totals;
+}
+
+if (stats?.ownRepos?.length) {
+  const totals = await fetchLanguageBytes(stats.ownRepos);
+  const sorted = Object.entries(totals).sort((a, b) => b[1] - a[1]);
+  const grand = sorted.reduce((a, [, v]) => a + v, 0);
+
+  if (grand > 0) {
+    const TOP = sorted.slice(0, 6);
+    const OTHER = sorted.slice(6).reduce((a, [, v]) => a + v, 0);
+    const segments = [...TOP, ...(OTHER > 0 ? [["OTHER", OTHER]] : [])];
+    const GRAYS = [T.textBody, "#94a3b8", T.textMute, "#4b5a68", T.rule];
+
+    const LW = 1280, LH = 200;
+    const barX = 42, barW = LW - 84, barY = 70, barH = 20;
+    let x = barX;
+    const segRects = segments.map(([, v], idx) => {
+      const w = (v / grand) * barW;
+      const fill = idx === 0 ? T.accent : GRAYS[Math.min(idx - 1, GRAYS.length - 1)];
+      const rect = `<rect x="${x.toFixed(1)}" y="${barY}" width="${Math.max(0, w - 2).toFixed(1)}" height="${barH}" fill="${fill}"/>`;
+      x += w;
+      return rect;
+    }).join("");
+
+    const legend = segments.map(([lang, v], idx) => {
+      const pct = ((v / grand) * 100).toFixed(1);
+      const fill = idx === 0 ? T.accent : GRAYS[Math.min(idx - 1, GRAYS.length - 1)];
+      const col = idx % 4, row = Math.floor(idx / 4);
+      const lx = barX + col * 300, ly = barY + barH + 40 + row * 28;
+      return `<circle cx="${lx}" cy="${ly - 5}" r="5" fill="${fill}"/><text x="${lx + 14}" y="${ly}" class="body" font-size="13">${lang} <tspan fill="${T.textMute}">${pct}%</tspan></text>`;
+    }).join("");
+
+    const langsSvg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${LW} ${LH}" width="${LW}" height="${LH}" role="img" aria-label="Language breakdown across owned repos">
+  <defs><style>${FONTS_AND_ANIM}</style></defs>
+  <rect width="${LW}" height="${LH}" fill="${T.bgCard}" stroke="${T.rule}" stroke-width="1" rx="2"/>
+  <rect x="0" y="0" width="${LW}" height="3" fill="${T.accent}"/>
+
+  <g class="fade d1">
+    <text x="${barX}" y="38" class="stat" font-size="11" fill="${T.accent}" letter-spacing="0.18em" font-weight="700">06 · LANGUAGES · @BEYONDERSS</text>
+  </g>
+
+  <g class="fade d2">
+    <rect x="${barX}" y="${barY}" width="${barW}" height="${barH}" rx="2" fill="${T.rule}"/>
+    ${segRects}
+    ${legend}
+  </g>
+</svg>`;
+    writeFileSync(resolve(outDir, "langs.svg"), langsSvg);
+    console.log(`✓ assets/langs.svg`);
+  }
+} else {
+  console.warn("⚠ skipped langs.svg (no repos)");
+}
+
+// ─── COMMIT-HOUR HEATMAP ──────────────────────────────────────
+// When do the commits actually happen — bucketed to IST (UTC+5:30, the
+// hero already states this as home base). Reads real commit timestamps
+// off each owned repo (author=login) rather than the public events feed,
+// which only holds ~90 days and is empty whenever recent work landed via
+// PRs/squash-merges instead of direct pushes.
+async function fetchCommitHours(repos, login) {
+  const hours = new Array(24).fill(0);
+  let total = 0;
+  for (const repo of repos) {
+    try {
+      const r = await fetch(`https://api.github.com/repos/${repo.owner.login}/${repo.name}/commits?author=${login}&per_page=100`, {
+        headers: { ...authHeaders, "User-Agent": "BeyonderSS-readme-generator" }
+      });
+      if (!r.ok) continue;
+      const commits = await r.json();
+      if (!Array.isArray(commits)) continue;
+      for (const c of commits) {
+        const dateStr = c.commit?.author?.date;
+        if (!dateStr) continue;
+        const d = new Date(dateStr);
+        const istHour = (d.getUTCHours() + 5 + Math.floor((d.getUTCMinutes() + 30) / 60)) % 24;
+        hours[istHour]++;
+        total++;
+      }
+    } catch { /* skip unreadable repo */ }
+  }
+  return { hours, total };
+}
+
+const commitHours = stats?.ownRepos?.length
+  ? await fetchCommitHours(stats.ownRepos, "BeyonderSS").catch(e => { console.warn(`⚠ hours: ${e.message}`); return null; })
+  : null;
+const pushHours = commitHours?.total ? commitHours.hours : null;
+
+if (pushHours) {
+  const peak = pushHours.indexOf(Math.max(...pushHours));
+  const fmt = (h) => `${h % 12 === 0 ? 12 : h % 12}${h < 12 ? "AM" : "PM"}`;
+  const HW = 1280, HH = 200;
+  const barX = 42, barW = HW - 84, barY = 76, barH = 70;
+  const max = Math.max(1, ...pushHours);
+  const bw = barW / 24;
+  const hourBars = pushHours.map((n, h) => {
+    const bh = n === 0 ? 2 : Math.max(3, (n / max) * barH);
+    const x = barX + h * bw;
+    return `<rect x="${x.toFixed(1)}" y="${(barY + barH - bh).toFixed(1)}" width="${Math.max(1, bw - 2).toFixed(1)}" height="${bh.toFixed(1)}" fill="${h === peak ? T.accent : T.rule}"/>`;
+  }).join("");
+
+  const hoursSvg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${HW} ${HH}" width="${HW}" height="${HH}" role="img" aria-label="Commit activity by hour of day, IST">
+  <defs><style>${FONTS_AND_ANIM}
+    .h { font-family:'Bricolage',sans-serif; font-weight:700; fill:${T.text}; letter-spacing:-0.02em; }
+  </style></defs>
+  <rect width="${HW}" height="${HH}" fill="${T.bgCard}" stroke="${T.rule}" stroke-width="1" rx="2"/>
+  <rect x="0" y="0" width="${HW}" height="3" fill="${T.accent}"/>
+
+  <g class="fade d1">
+    <text x="${barX}" y="38" class="stat" font-size="11" fill="${T.accent}" letter-spacing="0.18em" font-weight="700">07 · RHYTHM · @BEYONDERSS</text>
+    <text x="${HW-42}" y="38" class="micro" font-size="11" text-anchor="end">PEAK · ${fmt(peak)} IST</text>
+  </g>
+
+  <g class="fade d2">
+    ${hourBars}
+    <text x="${barX}" y="${barY + barH + 22}" class="micro" font-size="10">12AM</text>
+    <text x="${(barX + barW / 2).toFixed(1)}" y="${barY + barH + 22}" class="micro" font-size="10" text-anchor="middle">12PM</text>
+    <text x="${(barX + barW).toFixed(1)}" y="${barY + barH + 22}" class="micro" font-size="10" text-anchor="end">12AM</text>
+  </g>
+</svg>`;
+  writeFileSync(resolve(outDir, "hours.svg"), hoursSvg);
+  console.log(`✓ assets/hours.svg`);
+} else {
+  console.warn("⚠ skipped hours.svg (no recent push events)");
 }
 
 // ─── FOOTER STATUS BAR ────────────────────────────────────────

@@ -32,6 +32,10 @@
 
   .dot{ fill:#22D3EE; animation:pulse 2.4s ease-in-out infinite; transform-origin:center; transform-box:fill-box; }
   @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.4; } }
+
+  .boot{ font-family:'JBM',ui-monospace,monospace; fill:#22D3EE; letter-spacing:0.04em;
+    opacity:0; animation:bootcycle 1s ease-in-out forwards; }
+  @keyframes bootcycle{ 0%{opacity:0} 15%{opacity:1} 70%{opacity:1} 100%{opacity:0} }
 </style>
 
     <pattern id="grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -61,8 +65,22 @@
   <rect width="1280" height="440" fill="url(#glow)"/>
   <rect width="1280" height="440" fill="url(#glow2)"/>
 
+  <!-- boot sequence — plays once before the hero content reveals -->
+  <g class="boot" font-size="18" style="animation-delay:0s">
+    <text x="64" y="188">BOOTING SYSTEM_</text>
+  </g>
+  <g class="boot" font-size="15" style="animation-delay:.18s">
+    <text x="64" y="222">&gt; whoami · puneet-bhardwaj</text>
+  </g>
+  <g class="boot" font-size="15" style="animation-delay:.34s">
+    <text x="64" y="246">&gt; uptime · 3+ yrs prod</text>
+  </g>
+  <g class="boot" font-size="15" style="animation-delay:.50s">
+    <text x="64" y="270">&gt; status · ready ▌</text>
+  </g>
+
   <!-- corner brackets -->
-  <g stroke="#22D3EE" stroke-width="2" fill="none" class="fade d1">
+  <g stroke="#22D3EE" stroke-width="2" fill="none" class="fade d1" style="animation-delay:1.60s">
     <path d="M 28 28 L 28 92 M 28 28 L 92 28"/>
     <path d="M 1252 28 L 1252 92 M 1252 28 L 1188 28"/>
     <path d="M 28 412 L 28 348 M 28 412 L 92 412"/>
@@ -70,22 +88,22 @@
   </g>
 
   <!-- top meta strip -->
-  <g class="fade d1">
+  <g class="fade d1" style="animation-delay:1.60s">
     <line x1="64" y1="76" x2="220" y2="76" stroke="#22D3EE" stroke-width="1.5"/>
     <text x="232" y="80" class="meta" font-size="13">00 · PROFILE · @BEYONDERSS</text>
   </g>
 
   <!-- right meta: small N° tag (never collides with name) -->
-  <g class="fade d2">
+  <g class="fade d2" style="animation-delay:1.75s">
     <text x="1176" y="80" class="micro" font-size="11" text-anchor="end">N° / 2026</text>
     <circle cx="1190" cy="76" r="4" class="dot"/>
   </g>
 
   <!-- name — sized so it never crosses x=1120 -->
-  <text x="62" y="232" class="name fade d2" font-size="98" fill="url(#nameGrad)">PUNEET BHARDWAJ</text>
+  <text x="62" y="232" class="name fade d2" style="animation-delay:1.75s" font-size="98" fill="url(#nameGrad)">PUNEET BHARDWAJ</text>
 
   <!-- role line -->
-  <text x="64" y="278" class="role fade d3" font-size="24">
+  <text x="64" y="278" class="role fade d3" style="animation-delay:1.90s" font-size="24">
     full-stack engineer
     <tspan fill="#22D3EE"> / </tspan>
     system designer
@@ -93,12 +111,12 @@
   </text>
 
   <!-- animated accent line -->
-  <g class="fade d4">
-    <path class="accent-line" d="M 64 312 L 1216 312"/>
+  <g class="fade d4" style="animation-delay:2.05s">
+    <path class="accent-line" style="animation-delay:1.70s" d="M 64 312 L 1216 312"/>
   </g>
 
   <!-- bottom pills (no SVG transform attribute on .fade element) -->
-  <g class="fade d5">
+  <g class="fade d5" style="animation-delay:2.20s">
     <g transform="translate(64 348)">
       <rect width="178" height="38" rx="2" fill="#22D3EE"/>
       <text x="89" y="25" class="pill-t" font-size="12" fill="#0a0d10" text-anchor="middle">SHIPPING · INTEGRIS</text>
@@ -118,7 +136,7 @@
   </g>
 
   <!-- right column: huge faded N°26 (offset further right & lower so it sits BELOW the name's right edge) -->
-  <g class="fade d3">
+  <g class="fade d3" style="animation-delay:1.90s">
     <text x="1208" y="408" class="name" font-size="72" text-anchor="end" fill="#22D3EE" opacity="0.18">N°26</text>
   </g>
 

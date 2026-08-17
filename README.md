@@ -28,12 +28,15 @@
 
 <br/>
 
-<!-- ░░ 02 · LIVE ACTIVITY · SNAKE ░░ -->
+<!-- ░░ LIVE ACTIVITY · SNAKE ░░ -->
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/BeyonderSS/BeyonderSS/output/github-contribution-grid-snake-dark.svg" />
   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/BeyonderSS/BeyonderSS/output/github-contribution-grid-snake.svg" />
   <img alt="contribution snake — eats my commits" src="https://raw.githubusercontent.com/BeyonderSS/BeyonderSS/output/github-contribution-grid-snake-dark.svg" width="100%" />
 </picture>
+
+<!-- ░░ WAVEFORM (custom SVG) — same year, as a sound wave ░░ -->
+<img src="https://raw.githubusercontent.com/BeyonderSS/BeyonderSS/main/assets/waveform.svg" alt="Commit waveform — a year of contributions as a sound wave" width="100%" />
 
 <br/>
 
@@ -72,6 +75,16 @@ Deepgram live transcription, Electron overlay invisible during screen-shares, Ne
 
 <!-- ░░ STACK (custom SVG) ░░ -->
 <img src="https://raw.githubusercontent.com/BeyonderSS/BeyonderSS/main/assets/stack.svg" alt="Tech stack" width="100%" />
+
+<br/>
+
+<!-- ░░ LANGUAGES (custom SVG) ░░ -->
+<img src="https://raw.githubusercontent.com/BeyonderSS/BeyonderSS/main/assets/langs.svg" alt="Language breakdown across owned repos" width="100%" />
+
+<br/>
+
+<!-- ░░ RHYTHM (custom SVG) — commit activity by hour, IST ░░ -->
+<img src="https://raw.githubusercontent.com/BeyonderSS/BeyonderSS/main/assets/hours.svg" alt="Commit activity by hour of day, IST" width="100%" />
 
 <br/>
 
