@@ -39,18 +39,18 @@
     .h    { font-family:'Bricolage',sans-serif; font-weight:700; fill:#ffffff; letter-spacing:-0.02em; }
   </style></defs>
 
-  <rect width="620" height="240" fill="#0f0f0f" stroke="#1f1f1f" stroke-width="1" rx="2"/>
+  <rect width="620" height="240" fill="#0e1216" stroke="#1c2126" stroke-width="1" rx="2"/>
   <rect x="0" y="0" width="3" height="240" fill="#22D3EE"/>
 
   <g class="fade d1">
-    <text x="24" y="38" class="stat" font-size="11">SYSTEM STATS · @BEYONDERSS</text>
+    <text x="24" y="38" class="stat" font-size="11">03 · STATS · @BEYONDERSS</text>
     <text x="24" y="76" class="h"    font-size="28">the receipts.</text>
   </g>
 
   <g class="fade d2" transform="translate(24 120)">
     <g transform="translate(0 0)">
       <text y="22"  class="stat" font-size="11">REPOS</text>
-      <text y="84"  class="big" font-size="60">26</text>
+      <text y="84"  class="big" font-size="60">22</text>
     </g>
     <g transform="translate(140 0)">
       <text y="22"  class="stat" font-size="11">STARS</text>
@@ -58,7 +58,7 @@
     </g>
     <g transform="translate(280 0)">
       <text y="22"  class="stat" font-size="11">FOLLOWERS</text>
-      <text y="84"  class="big" font-size="60">12</text>
+      <text y="84"  class="big" font-size="60">13</text>
     </g>
     <g transform="translate(440 0)">
       <text y="22"  class="stat" font-size="11">FOLLOWING</text>
@@ -67,6 +67,6 @@
   </g>
 
   <g class="fade d3" transform="translate(24 210)">
-    <text class="lbl" font-size="10">UPDATED · 2026-05-20  ·  REGENERATES ON COMMIT</text>
+    <text class="lbl" font-size="10">UPDATED · 2026-08-17  ·  REGENERATES ON COMMIT</text>
   </g>
 </svg>

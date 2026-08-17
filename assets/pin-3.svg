@@ -39,7 +39,7 @@
     .num-ac{ font-family:'JBM',ui-monospace,monospace; fill:#22D3EE; font-weight:700; }
   </style></defs>
 
-  <rect width="620" height="200" fill="#0f0f0f" stroke="#1f1f1f" stroke-width="1" rx="2"/>
+  <rect width="620" height="200" fill="#0e1216" stroke="#1c2126" stroke-width="1" rx="2"/>
   <rect x="0" y="0" width="620" height="3" fill="#22D3EE"/>
 
   <g class="fade d1">

@@ -20,6 +20,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execSync } from "node:child_process";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, "../..");
@@ -31,17 +32,32 @@ const fontToBase64 = (p) => readFileSync(p).toString("base64");
 const BRICOLAGE = fontToBase64(resolve(fontsDir, "bricolage-latin.woff2"));
 const JBM       = fontToBase64(resolve(fontsDir, "jbm-latin.woff2"));
 
+// auth token for GitHub REST + GraphQL — avoids the 60req/hr anon cap and
+// unlocks the contribution calendar (streak card needs GraphQL). Falls back
+// to `gh auth token` since this is generated locally, not in CI.
+function ghToken() {
+  if (process.env.GH_TOKEN) return process.env.GH_TOKEN;
+  if (process.env.GITHUB_TOKEN) return process.env.GITHUB_TOKEN;
+  try { return execSync("gh auth token", { stdio: ["ignore", "pipe", "ignore"] }).toString().trim(); }
+  catch { return null; }
+}
+const TOKEN = ghToken();
+const authHeaders = TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {};
+if (!TOKEN) console.warn("⚠ no GitHub token found — unauthenticated (rate-limited), streak card will be skipped");
+
 // ─── tokens ─────────────────────────────────────────────────
+// bg carries a faint cool tint (not neutral #0a0a0a) — a deliberate
+// fingerprint against the generic "pure black + one neon accent" look.
 const T = {
-  bg:        "#0a0a0a",
-  bgGrid:    "#161616",
-  bgCard:    "#0f0f0f",
+  bg:        "#0a0d10",
+  bgGrid:    "#12171b",
+  bgCard:    "#0e1216",
   accent:    "#22D3EE",
   accentDim: "#155e6b",
   text:      "#ffffff",
   textBody:  "#cbd5e1",
   textMute:  "#64748b",
-  rule:      "#1f1f1f",
+  rule:      "#1c2126",
 };
 
 // ─── shared <defs> for fonts + animation ────────────────────
@@ -135,7 +151,7 @@ const hero = `<?xml version="1.0" encoding="UTF-8"?>
   <!-- top meta strip -->
   <g class="fade d1">
     <line x1="64" y1="76" x2="220" y2="76" stroke="${T.accent}" stroke-width="1.5"/>
-    <text x="232" y="80" class="meta" font-size="13">00 · PROFILE / @BeyonderSS</text>
+    <text x="232" y="80" class="meta" font-size="13">00 · PROFILE · @BEYONDERSS</text>
   </g>
 
   <!-- right meta: small N° tag (never collides with name) -->
@@ -204,8 +220,7 @@ const now = `<?xml version="1.0" encoding="UTF-8"?>
   <rect x="0" y="0" width="4" height="${NH}" fill="${T.accent}"/>
 
   <g class="fade d1">
-    <text x="42" y="50" class="label" font-size="13">/NOW · <tspan fill="${T.textMute}">~/CONFIG</tspan></text>
-    <circle cx="180" cy="46" r="4" class="dot"/>
+    <text x="42" y="50" class="label" font-size="13">01 · NOW · <tspan fill="${T.textMute}">~/CONFIG</tspan></text>
     <text x="${NW-42}" y="50" class="micro" font-size="11" text-anchor="end">UPDATED · ${new Date().toISOString().slice(0,10).toUpperCase()}</text>
     <text x="42" y="106" class="h" font-size="32">currently on my desk.</text>
   </g>
@@ -231,10 +246,73 @@ const now = `<?xml version="1.0" encoding="UTF-8"?>
 writeFileSync(resolve(outDir, "now.svg"), now);
 console.log(`✓ assets/now.svg (${now.length} bytes)`);
 
+// ─── LINK BADGES (replaces shields.io) ───────────────────────
+// Reuses the hero's pill grammar (filled = primary, outline = secondary)
+// instead of shields.io's boxier for-the-badge style, which clashed with
+// the thin-stroke / rx=2 language everywhere else.
+function badge(label, { filled = false, w } = {}) {
+  const H = 52;
+  const width = w ?? label.length * 11 + 70;
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${H}" width="${width}" height="${H}" role="img" aria-label="${label}">
+  <defs><style>${FONTS_AND_ANIM}
+    .b { font-family:'JBM',ui-monospace,monospace; font-weight:700; letter-spacing:0.14em; }
+  </style></defs>
+  <rect x="1" y="1" width="${width - 2}" height="${H - 2}" rx="2"
+    fill="${filled ? T.accent : "none"}" stroke="${T.accent}" stroke-width="1.5"/>
+  <text x="${width / 2}" y="${H / 2 + 5}" class="b" font-size="13" text-anchor="middle"
+    fill="${filled ? T.bg : T.accent}">${label} →</text>
+</svg>`;
+}
+
+writeFileSync(resolve(outDir, "badge-portfolio.svg"), badge("PORTFOLIO", { filled: true, w: 200 }));
+writeFileSync(resolve(outDir, "badge-linkedin.svg"),  badge("LINKEDIN",  { w: 180 }));
+writeFileSync(resolve(outDir, "badge-email.svg"),     badge("EMAIL",     { w: 150 }));
+console.log("✓ assets/badge-*.svg");
+
+// ─── STACK STRIP (replaces skillicons.dev) ───────────────────
+// Typographic instead of colored logo marks — keeps the monochrome +
+// single-accent discipline the rest of the page holds to.
+const STACK_ROW1 = ["TS", "NODE", "NEXT.JS", "REACT", "THREE.JS", "ELECTRON", "PRISMA"];
+const STACK_ROW2 = ["MONGODB", "POSTGRES", "KAFKA", "DOCKER", "AWS", "VERCEL", "LINUX"];
+
+function tokenRow(items, y, fontSize = 15) {
+  const charW = fontSize * 0.6;
+  let x = 42, out = "";
+  items.forEach((it, idx) => {
+    out += `<text x="${x}" y="${y}" class="body" font-size="${fontSize}">${it}</text>`;
+    x += it.length * charW + 14;
+    if (idx < items.length - 1) {
+      out += `<text x="${x}" y="${y}" class="meta" font-size="${fontSize}" fill="${T.accent}">·</text>`;
+      x += 24;
+    }
+  });
+  return out;
+}
+
+const SKW = 1280, SKH = 170;
+const stackSvg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${SKW} ${SKH}" width="${SKW}" height="${SKH}" role="img" aria-label="Tech stack">
+  <defs><style>${FONTS_AND_ANIM}
+    .h { font-family:'Bricolage',sans-serif; font-weight:700; fill:${T.text}; letter-spacing:-0.02em; }
+  </style></defs>
+  <rect width="${SKW}" height="${SKH}" fill="${T.bg}"/>
+  <rect x="0" y="0" width="4" height="${SKH}" fill="${T.accent}"/>
+  <g class="fade d1">
+    <text x="42" y="42" class="meta" font-size="13">02 · STACK · @BEYONDERSS</text>
+  </g>
+  <g class="fade d2">
+    ${tokenRow(STACK_ROW1, 92)}
+    ${tokenRow(STACK_ROW2, 136)}
+  </g>
+</svg>`;
+writeFileSync(resolve(outDir, "stack.svg"), stackSvg);
+console.log(`✓ assets/stack.svg`);
+
 // ─── PINNED REPO CARDS ──────────────────────────────────────
 async function fetchRepo(owner, name) {
   const r = await fetch(`https://api.github.com/repos/${owner}/${name}`, {
-    headers: { "User-Agent": "BeyonderSS-readme-generator" }
+    headers: { ...authHeaders, "User-Agent": "BeyonderSS-readme-generator" }
   });
   if (!r.ok) throw new Error(`${r.status} for ${owner}/${name}`);
   return r.json();
@@ -310,10 +388,10 @@ for (const [owner, name] of PINS) {
 // ─── STATS CARD ─────────────────────────────────────────────
 async function fetchStats() {
   const user = await (await fetch("https://api.github.com/users/BeyonderSS", {
-    headers: { "User-Agent": "BeyonderSS-readme-generator" }
+    headers: { ...authHeaders, "User-Agent": "BeyonderSS-readme-generator" }
   })).json();
   const repos = await (await fetch("https://api.github.com/users/BeyonderSS/repos?per_page=100&type=owner", {
-    headers: { "User-Agent": "BeyonderSS-readme-generator" }
+    headers: { ...authHeaders, "User-Agent": "BeyonderSS-readme-generator" }
   })).json();
   const stars = repos.reduce((a, r) => a + (r.stargazers_count || 0), 0);
   const own   = repos.filter(r => !r.fork).length;
@@ -344,7 +422,7 @@ if (stats) {
   <rect x="0" y="0" width="3" height="${SH}" fill="${T.accent}"/>
 
   <g class="fade d1">
-    <text x="24" y="38" class="stat" font-size="11">SYSTEM STATS · @BEYONDERSS</text>
+    <text x="24" y="38" class="stat" font-size="11">03 · STATS · @BEYONDERSS</text>
     <text x="24" y="76" class="h"    font-size="28">the receipts.</text>
   </g>
 
@@ -362,5 +440,106 @@ ${cell("FOLLOWING",  stats.following,    440, false)}
   writeFileSync(resolve(outDir, "stats.svg"), statsSvg);
   console.log(`✓ assets/stats.svg`);
 }
+
+// ─── STREAK CARD (replaces streak-stats.demolab.com) ─────────
+async function fetchContributionCalendar(login) {
+  if (!TOKEN) return null;
+  const query = `query($login:String!){ user(login:$login){ contributionsCollection { contributionCalendar {
+    totalContributions weeks { contributionDays { date contributionCount } } } } } }`;
+  const r = await fetch("https://api.github.com/graphql", {
+    method: "POST",
+    headers: { ...authHeaders, "Content-Type": "application/json", "User-Agent": "BeyonderSS-readme-generator" },
+    body: JSON.stringify({ query, variables: { login } }),
+  });
+  if (!r.ok) throw new Error(`graphql ${r.status}`);
+  const json = await r.json();
+  if (json.errors) throw new Error(json.errors.map(e => e.message).join("; "));
+  return json.data.user.contributionsCollection.contributionCalendar;
+}
+
+function computeStreaks(calendar) {
+  const days = calendar.weeks.flatMap(w => w.contributionDays);
+  let current = 0;
+  for (let idx = days.length - 1; idx >= 0; idx--) {
+    if (days[idx].contributionCount > 0) current++;
+    else if (idx === days.length - 1) continue; // today not logged yet — don't break the streak on it
+    else break;
+  }
+  let longest = 0, run = 0;
+  for (const d of days) {
+    run = d.contributionCount > 0 ? run + 1 : 0;
+    if (run > longest) longest = run;
+  }
+  return { current, longest, total: calendar.totalContributions };
+}
+
+const calendar = await fetchContributionCalendar("BeyonderSS")
+  .catch(e => { console.warn(`⚠ streak: ${e.message}`); return null; });
+
+if (calendar) {
+  const streaks = computeStreaks(calendar);
+  const SW2 = 620, SH2 = 240;
+  const cell2 = (label, value, dx, accent = false) =>
+`    <g transform="translate(${dx} 0)">
+      <text y="22"  class="stat" font-size="11">${label}</text>
+      <text y="84"  class="big${accent ? " ac" : ""}" font-size="52">${value}</text>
+    </g>`;
+
+  const streakSvg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${SW2} ${SH2}" width="${SW2}" height="${SH2}" role="img" aria-label="GitHub contribution streak for BeyonderSS">
+  <defs><style>${FONTS_AND_ANIM}
+    .stat { font-family:'JBM',ui-monospace,monospace; fill:${T.accent}; letter-spacing:0.18em; font-weight:700; }
+    .big  { font-family:'Bricolage',sans-serif; font-weight:700; fill:${T.text}; letter-spacing:-0.04em; }
+    .big.ac { fill:${T.accent}; }
+    .lbl  { font-family:'JBM',ui-monospace,monospace; fill:${T.textMute}; letter-spacing:0.16em; }
+    .h    { font-family:'Bricolage',sans-serif; font-weight:700; fill:${T.text}; letter-spacing:-0.02em; }
+  </style></defs>
+
+  <rect width="${SW2}" height="${SH2}" fill="${T.bgCard}" stroke="${T.rule}" stroke-width="1" rx="2"/>
+  <rect x="0" y="0" width="3" height="${SH2}" fill="${T.accent}"/>
+
+  <g class="fade d1">
+    <text x="24" y="38" class="stat" font-size="11">04 · STREAK · @BEYONDERSS</text>
+    <text x="24" y="76" class="h"    font-size="28">still shipping.</text>
+  </g>
+
+  <g class="fade d2" transform="translate(24 120)">
+${cell2("CURRENT", `${streaks.current}d`, 0,   true )}
+${cell2("LONGEST", `${streaks.longest}d`, 190, false)}
+${cell2("YEAR",    streaks.total,         380, false)}
+  </g>
+
+  <g class="fade d3" transform="translate(24 ${SH2 - 30})">
+    <text class="lbl" font-size="10">UPDATED · ${new Date().toISOString().slice(0,10).toUpperCase()}  ·  REGENERATES ON COMMIT</text>
+  </g>
+</svg>`;
+  writeFileSync(resolve(outDir, "streak.svg"), streakSvg);
+  console.log(`✓ assets/streak.svg`);
+} else {
+  console.warn("⚠ skipped streak.svg (no token / graphql failed)");
+}
+
+// ─── FOOTER STATUS BAR ────────────────────────────────────────
+const FW = 1280, FH = 96;
+const footerSvg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${FW} ${FH}" width="${FW}" height="${FH}" role="img" aria-label="Footer status bar">
+  <defs><style>${FONTS_AND_ANIM}</style></defs>
+  <rect width="${FW}" height="${FH}" fill="${T.bg}"/>
+  <rect x="0" y="0" width="${FW}" height="1.5" fill="${T.accent}" opacity="0.5"/>
+
+  <g class="fade d1">
+    <text x="42" y="40" class="body" font-size="15"><tspan fill="${T.accent}">root@beyonderss</tspan><tspan fill="${T.textMute}">:~$ </tspan>cat notes.txt</text>
+    <rect x="352" y="27" width="9" height="16" fill="${T.accent}" class="dot"/>
+    <text x="42" y="68" class="micro" font-size="12">「ありがとう」 — thanks for scrolling.</text>
+  </g>
+
+  <g class="fade d2">
+    <text x="${FW-42}" y="40" class="meta" font-size="12" text-anchor="end">SESSION · ACTIVE</text>
+    <circle cx="${FW-282}" cy="36" r="4" class="dot"/>
+    <text x="${FW-42}" y="68" class="micro" font-size="12" text-anchor="end">BHOPAL, IN · UTC+5:30 · N°26</text>
+  </g>
+</svg>`;
+writeFileSync(resolve(outDir, "footer.svg"), footerSvg);
+console.log(`✓ assets/footer.svg`);
 
 console.log("\nall assets generated.");
